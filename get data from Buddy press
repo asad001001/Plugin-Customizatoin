@@ -1,0 +1,381 @@
+function user_data(){
+?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<?php
+	$blogusers = get_users();
+	// Array of WP_User objects.
+	echo "<div class='main_container_bp'>";
+	$aa = 0;
+$cuid = get_current_user_id();
+	foreach ( $blogusers as $user ) {
+	$current_user = 0;
+	$featch_user = 0;
+$match = array();
+	$total = 0;
+	
+	
+	$args = array(
+		'field'     => '117',
+		'user_id'   => $user->ID
+	);
+	
+	$d = explode('&',bp_get_profile_field_data($args));	
+	$data = bp_get_profile_field_data( $args );
+	
+	
+	if(strpos($data, 'Willing') !== false){
+		echo '<div class=" inner_con">';
+	
+		$bt =  wp_nonce_url( bp_loggedin_user_domain() . bp_get_messages_slug() . '/compose/?r=' . bp_core_get_username( $user->ID ) );
+	echo "<div class='profile_block'>";
+		  echo '<img src="'.esc_url( get_avatar_url( $user->ID ) ).'" />';
+			echo 	 bp_core_get_userlink( $user->ID, $no_anchor = false, $just_link = false );
+	echo '</div>';
+	
+	echo "<div class='skills_block'> ";	
+		echo "<h4>Skillsets</h4>";
+	echo "<ul>";
+		if(strpos(bp_get_profile_field_data( array('field' => '53','user_id'   => $user->ID )), 'Willing') !== false){
+		
+			if(strpos(bp_get_profile_field_data( array('field' => '53','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'With Implements (Thuddy)  ');
+				}
+				
+				
+			
+			echo '<li> <b>With Implements (Thuddy)  </b> '; 
+			//  echo bp_get_profile_field_data( array('field' => '53','user_id'   => $user->ID )); 
+			 echo '</li>';
+			$featch_user++;
+			
+		}
+		if(strpos(bp_get_profile_field_data( array('field' => '58','user_id'   => $user->ID )), 'Willing') !== false){
+			$featch_user++;
+			echo '<li> <b>With Implements (Stingy)  </b> '; 
+			//  echo bp_get_profile_field_data( array('field' => '58','user_id'   => $user->ID )); 
+			 echo '</li>';
+		if(strpos(bp_get_profile_field_data( array('field' => '58','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'With Implements (Stingy)  ');
+				}
+		}
+		if(strpos(bp_get_profile_field_data( array('field' => '63','user_id'   => $user->ID )), 'Willing') !== false){
+			$featch_user++;
+		echo '<li> <b>Without Implements  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '63','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '63','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Without Implements ');
+				}
+		}
+	// echo "</ul>";
+	
+	// echo "<h4>Skillsets & Interests - Sensation Play</h4>";
+	// echo "<ul>";
+	if(strpos(bp_get_profile_field_data( array('field' => '68','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+if(strpos(bp_get_profile_field_data( array('field' => '68','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Wax Play');
+				}
+	echo '<li> <b>Wax Play  </b> ';  
+	// echo bp_get_profile_field_data( array('field' => '68','user_id'   => $user->ID )); 
+	echo '</li>';
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '73','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+if(strpos(bp_get_profile_field_data( array('field' => '73','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Temperature Play');
+				}
+	echo '<li> <b>Temperature Play  </b> '; 
+	//  echo bp_get_profile_field_data( array('field' => '73','user_id'   => $user->ID )); 
+	 echo '</li>';
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '78','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+	echo '<li> <b>Fire Play  </b> '; 
+	//  echo bp_get_profile_field_data( array('field' => '78','user_id'   => $user->ID ));
+	  echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '78','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Fire Play');
+				}
+		
+	}
+	// echo "</ul>";
+
+			
+	// echo "<h4>Skillsets & Interests - Edge Play</h4>";
+	// echo "<ul>";
+	if(strpos(bp_get_profile_field_data( array('field' => '87','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Breath Play  </b> '; 
+		//  echo bp_get_profile_field_data( array('field' => '87','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '87','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Breath Play');
+				}
+
+		}
+	if(strpos(bp_get_profile_field_data( array('field' => '92','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Electro Play  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '92','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '92','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Electro Play ');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '97','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Cutting / Piercing  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '97','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '97','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Cutting / Piercing ');
+				}
+	}
+	// 	echo "</ul>";
+	// echo "<h4>Skillsets & Interests - Roleplaying</h4>";
+	// echo "<ul>";
+	if(strpos(bp_get_profile_field_data( array('field' => '102','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>General Roleplay  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '102','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '102','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'General Roleplay ');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '107','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+	echo '<li> <b>Animal Roleplay  </b> '; 
+	//  echo bp_get_profile_field_data( array('field' => '107','user_id'   => $user->ID )); 
+	 echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '107','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Animal Roleplay');
+				}
+	
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '112','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Age Play  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '112','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '112','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Age Play');
+				}
+	
+	}
+	// echo "</ul>";
+	// echo "<h4>Skillsets & Interests - Bondage </h4>";
+	// echo "<ul>";
+	if(strpos(bp_get_profile_field_data( array('field' => '33','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Rope  </b> '; 
+		//  echo bp_get_profile_field_data( array('field' => '33','user_id'   => $user->ID ));
+		  echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '33','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Rope');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '43','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Japanese  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '43','user_id'   => $user->ID ));
+		 echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '43','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Japanese');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '48','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Suspension  </b> ';  
+		//echo bp_get_profile_field_data( array('field' => '48','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '48','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Suspension');
+				}
+	}
+	// echo "</ul>";
+	
+	// echo "<h4>Skillsets & Interests - Power Exchange & Mindsets </h4>";
+	// echo "<ul>";
+	if(strpos(bp_get_profile_field_data( array('field' => '117','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Dominant / submissive Dynamics  </b> '; 
+		//  echo bp_get_profile_field_data( array('field' => '117','user_id'   => $user->ID )); 
+		 echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '117','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Dominant / submissive Dynamics');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '122','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Master(Mistress) / slave Dynamics  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '122','user_id'   => $user->ID ));
+		 echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '122','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Master(Mistress) / slave Dynamics ');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '127','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Sadomasochism  </b> '; 
+		//  echo bp_get_profile_field_data( array('field' => '127','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '127','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Sadomasochism');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '132','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Humiliation / Degradation  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '132','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '132','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Humiliation / Degradation');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '137','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Switches & Switching  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '137','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '137','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Switches & Switching');
+				}
+	}
+	// echo "</ul>";
+																		 
+	// echo "<h4>Skillsets & Interests - Lifestyle & Sexuality</h4>";
+	// echo "<ul>";
+	if(strpos(bp_get_profile_field_data( array('field' => '142','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Polydynamics / Open relations  </b> '; 
+		//  echo bp_get_profile_field_data( array('field' => '142','user_id'   => $user->ID )); 
+		 echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '142','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Polydynamics / Open relations');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '147','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Lifestyle Basics  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '147','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '147','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Lifestyle Basics');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '152','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Negotiation Skills  </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '152','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '152','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Negotiation Skills');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '161','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Writing / Journaling  </b> ';
+	
+	//echo bp_get_profile_field_data( array('field' => '161','user_id'   => $user->ID ));
+	
+	echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '161','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Writing / Journaling');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '166','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Pain Processing </b> ';  
+		// echo bp_get_profile_field_data( array('field' => '166','user_id'   => $user->ID ));
+		 echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '166','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Pain Processing');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '171','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Sexuality </b>';  
+		// echo bp_get_profile_field_data( array('field' => '171','user_id'   => $user->ID )); 
+		echo '</li>';
+if(strpos(bp_get_profile_field_data( array('field' => '171','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+array_push($match,'Sexuality');
+				}
+	}
+	if(strpos(bp_get_profile_field_data( array('field' => '176','user_id'   => $user->ID )), 'Willing') !== false){
+		$featch_user++;
+		echo '<li> <b>Online & Long Distance</b> '; 
+		//  echo  bp_get_profile_field_data( array('field' => '176','user_id'   => $user->ID )); 
+		 echo '</li>';		
+if(strpos(bp_get_profile_field_data( array('field' => '176','user_id'   => $cuid )), 'Willing') !== false){
+					$current_user++;
+				array_push($match,'Online & Long Distance');
+				}														
+	}
+		echo "</ul>";
+	echo '</div>';
+
+	echo "<div class='percentag_bloock'>";
+
+	// echo  "Your ".$current_user." Skills Matched With ".$user->user_login;
+	
+
+		$per  = ($current_user / $featch_user) * 100;
+
+		echo "<h3 style='text-align: center;'>".round($per,0)."% Matched</h3>";
+		
+	
+
+	$aa++;
+		// echo $featch_user." total 27";
+
+	echo "</div>";
+
+
+	echo "<div class='msg_bloock'>";
+	echo "<a href='".$bt."'> Message</a>";
+	echo "</div>";
+	
+	
+		echo  "</div>";
+		}
+		
+	
+	}
+	echo "</div>";
+	
+	
+	
+	}
+	
+	add_shortcode('user_data','user_data');
+
+
