@@ -1,0 +1,61 @@
+
+
+add_action( 'pre_get_posts', 'custom_pre_get_posts' );
+function custom_pre_get_posts($query) {
+    if ( is_woocommerce() ) {
+                
+                if(!empty($_GET['pages'])){
+                            $query->set('posts_per_page', $_GET['pages']);
+
+                }else{
+                   
+                   $query->set('posts_per_page', 12);
+                }
+                
+
+    }
+
+    return $query;
+}
+add_action('woocommerce_after_shop_loop' , "add_loadmore");
+function add_loadmore(){
+    $number = $_GET['pages'] + 12;
+    
+    global $wp;
+
+// get current url with query string.
+$current_url =  home_url( $wp->request ); 
+
+// get the position where '/page.. ' text start.
+$pos = strpos($current_url , '/page');
+
+// remove string from the specific postion
+$finalurl = substr($current_url,0,$pos);
+
+
+    
+    ?>
+
+<style>
+.post-type-archive-product .pages {
+    display: none;
+}
+
+.for_css_btn {
+    text-align: center;
+}
+</style>
+<?php if(!empty($_GET['pages'])){ ?>
+
+<div class="for_css_btn"><a href="<?php echo  $finalurl."?pages=".$number ?>" class="load_more_btn" >Load More</a></div>
+
+<?php }else{
+ ?>
+
+<div class="for_css_btn"><a href="<?php echo  $finalurl."?pages=24"; ?>" class="load_more_btn" >Load More</a></div>
+
+<?php
+    }
+    
+}
+
