@@ -1,0 +1,273 @@
+
+
+add_shortcode('sponsor_logo','sponsor_logo');
+
+function sponsor_logo(){
+    
+ ?>   
+<form action="" method="POST" class="ibenic_upload_form" enctype="multipart/form-data">
+  <div class="ibenic_upload_message"></div>
+  <div id="ibenic_file_upload" class="file-upload">
+  	<input type="file" id="ibenic_file_input" style="opacity:0;" />
+  	<p class="ibenic_file_upload_text"><?php _e( 'Upload your file', 'ibenic_upload' ); ?></p>
+  </div>
+  <div id="ibenic_file_upload_preview" class="file-upload file-preview" style="display:none;">
+  	<div class="ibenic_file_preview"></div>
+  	<button data-fileurl="" class="ibenic_file_delete">
+  	  <?php _e( 'Delete', 'ibenic_upload' ); ?>
+  	</button>
+  </div>
+</form>
+
+<style>
+    .file-upload {
+	position: relative;
+	display:block;	
+	width:150px;
+	height:150px;
+	border-radius: 3px;
+	background-color:rgba(0,0,0,0.3);
+	font-size: 14px;
+	color:white;
+	text-align: center; 
+	line-height: 150px;
+
+}
+
+.file-upload input {
+	opacity: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: block;
+	cursor: pointer;
+}
+
+.file-preview img{
+	width:100%;
+	height: auto;
+}
+
+.file-preview .ibenic_file_preview {
+	position: absolute;
+	width:100%;
+	height:100%;
+	overflow: hidden;
+}
+
+.ibenic_file_delete {
+	position: absolute;
+	width: 100%;
+	top:98%;
+	left:0;
+	padding:0.5em;
+	text-align: center;
+	color:white;
+	background-color:red;
+}
+    
+    
+</style>
+<script>
+    
+    
+    (function($){
+
+	$(document).ready( function(){
+
+		// Just to be sure that the input will be called
+		$("#ibenic_file_upload").on("click", function(){
+		  	$('#ibenic_file_input').click(function(event) {
+				event.stopPropagation();
+      			});
+    		});
+
+		$('#ibenic_file_input').on('change', prepareUpload);
+
+		    function prepareUpload(event) { 
+	var file = event.target.files;
+  	var parent = $("#" + event.target.id).parent();
+  	var data = new FormData();
+  	data.append("action", "ibenic_file_upload");
+  	$.each(file, function(key, value)
+    	{
+      		data.append("ibenic_file_upload", value);
+    	});
+
+    	$.ajax({
+    		  url: wc_add_to_cart_params.ajax_url,
+	          type: 'POST',
+	          data: data,
+	          cache: false,
+	          dataType: 'json',
+	          processData: false, // Don't process the files
+	          contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+	          success: function(data, textStatus, jqXHR) {	
+	  	 
+	              if( data.response == "SUCCESS" ){
+		                var preview = "";
+		                if( data.type === "image/jpg" 
+		                  || data.type === "image/png" 
+		                  || data.type === "image/gif"
+		                  || data.type === "image/jpeg"
+		                ) {
+		                  preview = "<img src='" + data.url + "' />";
+		                } else {
+		                  preview = data.filename;
+		                }
+		  
+		                var previewID = parent.attr("id") + "_preview";
+		                var previewParent = $("#"+previewID);
+		                previewParent.show();
+		                previewParent.children(".ibenic_file_preview").empty().append( preview );
+		                previewParent.children( "button" ).attr("data-fileurl",data.url );
+		                parent.children("input").val("");
+		                parent.hide();
+	                
+	                 } else {
+		             alert( data.error );
+	                 }
+
+		}
+
+	});
+
+}
+
+	});
+
+})(jQuery);
+    
+
+</script>
+ <?php
+}
+
+add_action("wp_ajax_nopriv_ibenic_file_upload", "ibenic_file_upload");
+add_action("wp_ajax_ibenic_file_upload", "ibenic_file_upload");
+
+function ibenic_file_upload() {
+
+	$usingUploader = 2;
+
+	$fileErrors = array(
+		0 => "There is no error, the file uploaded with success",
+		1 => "The uploaded file exceeds the upload_max_files in server settings",
+		2 => "The uploaded file exceeds the MAX_FILE_SIZE from html form",
+		3 => "The uploaded file uploaded only partially",
+		4 => "No file was uploaded",
+		6 => "Missing a temporary folder",
+		7 => "Failed to write file to disk",
+		8 => "A PHP extension stoped file to upload" );
+
+	$posted_data =  isset( $_POST ) ? $_POST : array();
+	$file_data = isset( $_FILES ) ? $_FILES : array();
+
+	$data = array_merge( $posted_data, $file_data );
+
+	$response = array();
+
+	if( $usingUploader == 1 ) {
+		$uploaded_file = wp_handle_upload( $data['ibenic_file_upload'], array( 'test_form' => false ) );
+
+		if( $uploaded_file && ! isset( $uploaded_file['error'] ) ) {
+			$response['response'] = "SUCCESS";
+			$response['filename'] = basename( $uploaded_file['url'] );
+			$response['url'] = $uploaded_file['url'];
+			$response['type'] = $uploaded_file['type'];
+		} else {
+			$response['response'] = "ERROR";
+			$response['error'] = $uploaded_file['error'];
+		}
+	} elseif ( $usingUploader == 2) {
+	    
+		$attachment_id = media_handle_upload( 'ibenic_file_upload', 0 );
+		
+		if ( is_wp_error( $attachment_id ) ) { 
+			$response['response'] = "ERROR";
+			$response['error'] = $fileErrors[ $data['ibenic_file_upload']['error'] ];
+		} else {
+			$fullsize_path = get_attached_file( $attachment_id );
+			$pathinfo = pathinfo( $fullsize_path );
+			$url = wp_get_attachment_url( $attachment_id );
+			$response['response'] = "SUCCESS";
+			$response['filename'] = $pathinfo['filename'];
+			$response['url'] = $url;
+			$type = $pathinfo['extension'];
+			if( $type == "jpeg"
+			|| $type == "jpg"
+			|| $type == "png"
+			|| $type == "gif" ) {
+				$type = "image/" . $type;
+			}
+			$response['type'] = $type;
+			
+			update_post_meta( 2258, 'sponsor_logo_upload', $attachment_id );
+
+		}
+	} else {
+	    
+		$upload_dir = wp_upload_dir();
+	    	$upload_path = $upload_dir["basedir"]."/custom/";
+	    	$upload_url = $upload_dir["baseurl"]."/custom/";
+
+	    	if(!file_exists($upload_path)){
+			mkdir($upload_path);
+		}
+		$fileName = $data["ibenic_file_upload"]["name"];
+		$fileNameChanged = str_replace(" ", "_", $fileName);
+
+		$temp_name = $data["ibenic_file_upload"]["tmp_name"];
+		$file_size = $data["ibenic_file_upload"]["size"];
+		$fileError = $data["ibenic_file_upload"]["error"];
+		$mb = 2 * 1024 * 1024;
+		$targetPath = $upload_path;
+		$response["filename"] = $fileName;
+		$response["file_size"] = $file_size;
+
+		if($fileError > 0){
+			$response["response"] = "ERROR";
+                		$response["error"] = $fileErrors[ $fileError ];
+		} else {
+			if(file_exists($targetPath . "/" . $fileNameChanged)){
+						
+				$response["response"] = "ERROR";
+		                	$response["error"] = "File already exists.";
+			} else {
+
+				if($file_size <= $mb){
+
+			            	if( move_uploaded_file( $temp_name, $targetPath . "/" . $fileNameChanged ) ){
+
+			            		$response["response"] = "SUCCESS";
+			            		$response["url"] =  $upload_url . "/" . $fileNameChanged;
+			            		$file = pathinfo( $targetPath . "/" . $fileNameChanged );
+			            		
+			            		if( $file && isset( $file["extension"] ) ){
+			            			$type = $file["extension"];
+			            			if( $type == "jpeg"
+							|| $type == "jpg"
+							|| $type == "png"
+							|| $type == "gif" ) {
+								$type = "image/" . $type;
+							}
+			            			$response["type"] = $type;	
+
+			            		}
+			            		
+			            	} else {
+			            		$response["response"] = "ERROR";
+			            		$response["error"]= "Upload Failed.";
+			            	}
+		            	
+		           		 } else {
+		            		$response["response"] = "ERROR";
+		            		$response["error"]= "File is too large. Max file size is 2 MB.";
+		            	}
+	            	}
+		}
+	}
+
+	echo json_encode( $response );
+	die();
+}
