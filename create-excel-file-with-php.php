@@ -1,5 +1,5 @@
 <?php 
-
+//This process requires the PHPExcel Library 
 // add_shortcode('weekly_report_function','weekly_report_function');
 
 function weekly_report_function(){
