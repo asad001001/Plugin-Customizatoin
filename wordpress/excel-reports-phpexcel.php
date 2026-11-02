@@ -1,14 +1,18 @@
-<?php 
+<?php
+/**
+ * Weekly / monthly Excel reports
+ *
+ * Fills an .xlsx template with order data using PHPExcel and emails it; includes a scheduled monthly report hook.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
+ 
 //This process requires the PHPExcel Library 
 // add_shortcode('weekly_report_function','weekly_report_function');
 
 function weekly_report_function(){
 
 
-/** Error reporting */
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
 date_default_timezone_set('Europe/London');
 
 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
@@ -388,10 +392,6 @@ add_action('monthly_reports','monthly_report_function');
 function monthly_report_function(){
 
 
-/** Error reporting */
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
 date_default_timezone_set('Europe/London');
 
 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
@@ -1023,9 +1023,9 @@ if($event_name != ''){
             $query->the_post();
              $event_id = get_the_ID();
              
-            if($_POST['event_date'] != ''){
+            if ( ! empty( $_POST['event_date'] ) ) {
                 
-            $date_array = explode('-',$_POST['event_date']); 
+            $date_array = explode( '-', sanitize_text_field( wp_unslash( $_POST['event_date'] ) ) ); 
             
             $from_date = date("m/d/Y",strtotime($date_array[0]));
 			$to_date = date("m/d/Y",strtotime($date_array[1]));
@@ -1131,7 +1131,7 @@ if($event_name != ''){
             }
              
         }
-        if($count < 1 && $_POST['event_date'] != '' ){
+        if ( $count < 1 && ! empty( $_POST['event_date'] ) ) {
 
         echo '<p>No events found matching your criteria.</p>';
         

@@ -1,3 +1,9 @@
+/**
+ * Is element in viewport
+ *
+ * isInViewport(el) returns true when the element is fully visible,
+ * and the demo below updates #message as .box scrolls in and out of view.
+ */
 function isInViewport(el) {
     const rect = el.getBoundingClientRect();
     return (

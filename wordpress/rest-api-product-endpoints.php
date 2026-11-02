@@ -1,6 +1,11 @@
-
-
-
+<?php
+/**
+ * Custom REST API product endpoints
+ *
+ * Registers custom-woocommerce/v1 routes returning paginated, randomly-ordered (seeded) products filtered by taxonomy, plus filtered term counts.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 // new end 
  
 add_action( 'rest_api_init', function () {
@@ -8,8 +13,8 @@ add_action( 'rest_api_init', function () {
     'methods' => 'GET',
     'callback' => function($data) {
 
-      $page = (isset($_GET['page']) && $_GET['page']) ? $_GET['page'] : 1;
-      $seed = (isset($_GET['seed']) && $_GET['seed']) ? $_GET['seed'] : rand(11111,99999);
+      $page = max( 1, absint( $_GET['page'] ?? 1 ) );
+      $seed = absint( $_GET['seed'] ?? 0 ) ?: wp_rand( 11111, 99999 );
 
       $args = [
         'post_type' => 'product',
@@ -66,7 +71,7 @@ add_action( 'rest_api_init', function () {
        */
 
         if(isset($_GET['categories'])) {
-          $cats = explode(',', $_GET['categories']);
+          $cats = array_map( 'sanitize_title', explode( ',', wp_unslash( $_GET['categories'] ) ) );
           $categories = [];
 
          $category_tax_query = ['relation' => 'OR'];

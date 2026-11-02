@@ -1,6 +1,11 @@
-
-
-
+<?php
+/**
+ * My Account endpoint + per-product quantity limits
+ *
+ * Class that adds a "Tickets" My Account endpoint and enforces min/max purchase quantity per product in cart and on add-to-cart.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
  class TickectsComp{
 
 	 

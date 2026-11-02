@@ -1,10 +1,18 @@
+<?php
+/**
+ * AJAX bulk add-to-cart
+ *
+ * Adds several products (simple or a chosen variation) to the cart in one AJAX request. Expects `id` as "productId/attr|productId|...".
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 function to_put_in_cart(){
     
 global $woocommerce;    
     
     $dd='';
     $with = ''; 
-$ids = array_filter(explode('|',$_POST['id']), function($value) { return !is_null($value) && $value !== ''; });
+$ids = array_filter(explode( '|', sanitize_text_field( wp_unslash( $_POST['id'] ?? '' ) ) ), function($value) { return !is_null($value) && $value !== ''; });
     
 foreach($ids as $id){
     

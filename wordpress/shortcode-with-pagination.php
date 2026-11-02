@@ -1,4 +1,11 @@
 <?php
+/**
+ * Shortcode with pagination
+ *
+ * Lists a custom post type in a shortcode with working paginate_links() pagination.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 function Winners(){
 $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 	 $args = array(  

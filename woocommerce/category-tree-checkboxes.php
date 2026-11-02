@@ -1,3 +1,12 @@
+<?php
+/**
+ * Parent / child category checkbox tree
+ *
+ * Template part that renders product categories as nested checkboxes for a filter sidebar.
+ *
+ * Usage: include in a template where the filter sidebar should appear.
+ */
+?>
 <div class="con_tain">
                         
                         <?php

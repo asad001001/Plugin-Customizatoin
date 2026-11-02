@@ -1,11 +1,17 @@
-
-
+<?php
+/**
+ * Shop "Load more" button
+ *
+ * Controls products-per-page on the shop with a ?pages= query arg and prints a Load More button after the loop.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 add_action( 'pre_get_posts', 'custom_pre_get_posts' );
 function custom_pre_get_posts($query) {
     if ( is_woocommerce() ) {
                 
                 if(!empty($_GET['pages'])){
-                            $query->set('posts_per_page', $_GET['pages']);
+                            $query->set( 'posts_per_page', min( 200, absint( $_GET['pages'] ) ) );
 
                 }else{
                    
@@ -19,7 +25,7 @@ function custom_pre_get_posts($query) {
 }
 add_action('woocommerce_after_shop_loop' , "add_loadmore");
 function add_loadmore(){
-    $number = $_GET['pages'] + 12;
+    $number = absint( $_GET['pages'] ?? 0 ) + 12;
     
     global $wp;
 
