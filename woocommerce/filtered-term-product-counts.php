@@ -1,19 +1,26 @@
-
-$ps = $_POST['ps'];
+<?php
+/**
+ * Term product counts for current filters
+ *
+ * Counts how many products in each brand term match the current search/category filters (for filter sidebars).
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
+$ps = sanitize_text_field( wp_unslash( $_POST['ps'] ?? '' ) );
  $args = array(
            'post_type' => 'product','post_status' => array( 'publish' ), 'posts_per_page' => -1,
         );
     
-    $datacat = array_filter(explode('|',$_POST['pscat']), function($value) { return !is_null($value) && $value !== ''; });
-    $databrand = array_filter(explode('|',$_POST['psbrand']), function($value) { return !is_null($value) && $value !== ''; });
+    $datacat = array_filter(explode( '|', sanitize_text_field( wp_unslash( $_POST['pscat'] ?? '' ) ) ), function($value) { return !is_null($value) && $value !== ''; });
+    $databrand = array_filter(explode( '|', sanitize_text_field( wp_unslash( $_POST['psbrand'] ?? '' ) ) ), function($value) { return !is_null($value) && $value !== ''; });
     $pscat = $datacat;    
-    if($_POST['pscat'] != ''){
+    if ( ! empty( $_POST['pscat'] ) ){
         
-        $catformData = array_filter(explode('|',$_POST['pscat'] ), function($value) { return !is_null($value) && $value !== ''; });
+        $catformData = array_filter(explode( '|', sanitize_text_field( wp_unslash( $_POST['pscat'] ?? '' ) ) ), function($value) { return !is_null($value) && $value !== ''; });
             
     }
     
-        if($_POST['ps'] != ''){
+        if ( ! empty( $_POST['ps'] ) ){
             
             $args['s'] = $ps;
             

@@ -1,4 +1,11 @@
-
+<?php
+/**
+ * Custom product data tab (admin)
+ *
+ * Adds a "Ticket" tab to the WooCommerce product edit screen with custom fields and saves them as product meta.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 /*
  * Tab
  */
@@ -91,25 +98,25 @@ function save_ticketdetails_option_fields( $post_id ) {
 
 	
 	if ( isset( $_POST['_ticket_end_date'] ) ) :
-		update_post_meta( $post_id, '_ticket_end_date',$_POST['_ticket_end_date'] );
+		update_post_meta( $post_id, '_ticket_end_date', wc_clean( wp_unslash( $_POST['_ticket_end_date'] ) ) );
 	endif;
 	
 	if ( isset( $_POST['_total_tickets'] ) ) :
-		update_post_meta( $post_id, '_total_tickets', $_POST['_total_tickets']);
+		update_post_meta( $post_id, '_total_tickets', wc_clean( wp_unslash( $_POST['_total_tickets'] ) ) );
 	endif;
 	
 	
 	if ( isset( $_POST['_question_tickets'] ) ) :
-		update_post_meta( $post_id, '_question_tickets', $_POST['_question_tickets'] );
+		update_post_meta( $post_id, '_question_tickets', wc_clean( wp_unslash( $_POST['_question_tickets'] ) ) );
 	endif;
 	
 	
 	if ( isset( $_POST['_point_tickets'] ) ) :
-		update_post_meta( $post_id, '_point_tickets',$_POST['_point_tickets'] );
+		update_post_meta( $post_id, '_point_tickets', wc_clean( wp_unslash( $_POST['_point_tickets'] ) ) );
 	endif;
 	
 	if ( isset( $_POST['_competion_date'] ) ) :
-		update_post_meta( $post_id, '_competion_date',$_POST['_competion_date'] );
+		update_post_meta( $post_id, '_competion_date', wc_clean( wp_unslash( $_POST['_competion_date'] ) ) );
 	endif;
 	
 

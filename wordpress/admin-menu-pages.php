@@ -1,4 +1,11 @@
-
+<?php
+/**
+ * Custom admin menu pages
+ *
+ * Adds an "Admin Ticket Details" menu with a tickets table (with AJAX delete) and a newsletter subscribers page.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 add_action('admin_menu', 'promo_code');
 function promo_code(){
     add_menu_page('Admin Ticket Details ', 'Admin Ticket Details', 'manage_options', 'admin-ticket-details', 'user_methods_by_asad');
@@ -123,16 +130,21 @@ function user_methods_by_asad_2(){
 	}
 }
 add_action( 'wp_ajax_ticket_delete','ticket_delete' );
-function ticket_delete (){
-	
-	global $wpdb;
-	$number = $_POST['numbers'];
-	foreach($number as $num){
-	    
-        $wpdb->delete( 'tickets', array( 'ticketnumber' => $num ) );
-	    
+function ticket_delete() {
+	check_ajax_referer( 'ticket_delete', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( 'Not allowed', 403 );
 	}
 
+	global $wpdb;
+	$numbers = isset( $_POST['numbers'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['numbers'] ) ) : array();
+
+	foreach ( $numbers as $num ) {
+		$wpdb->delete( 'tickets', array( 'ticketnumber' => $num ), array( '%s' ) );
+	}
+
+	wp_send_json_success( count( $numbers ) );
 }
 
 
@@ -230,6 +242,7 @@ function user_methods_by_asad(){
 				});
 						var data = {
                     		'action': 'ticket_delete',
+                    		'nonce': '<?php echo esc_js( wp_create_nonce( 'ticket_delete' ) ); ?>',
                        		'numbers': numbers };
 
                     	jQuery.ajax({

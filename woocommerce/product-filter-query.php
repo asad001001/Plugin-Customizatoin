@@ -1,18 +1,33 @@
- $datacat = array_filter(explode('|',$_POST['pscat']), function($value) { return !is_null($value) && $value !== ''; });
-    $databrand = array_filter(explode('|',$_POST['psbrand']), function($value) { return !is_null($value) && $value !== ''; });
-    
-    
-    
-$pscat = $datacat;
-$ps = $_POST['ps'];
-$psbrand = $databrand;
-$psprice = $_POST['psprice'];
-$sorting = $_POST['pssorting'];
-$minprice = $_POST['minprice'];
-$maxprice = $_POST['maxprice'];
+<?php
+/**
+ * Product filter query (category, brand, price, sort)
+ *
+ * Builds a WP_Query for products from AJAX filter values: search, categories, brands, price range and sorting.
+ *
+ * Usage: paste into functions.php; call via AJAX action `product_filter`.
+ */
+add_action( 'wp_ajax_product_filter', 'product_filter_ajax' );
+add_action( 'wp_ajax_nopriv_product_filter', 'product_filter_ajax' );
 
- 
+/**
+ * Split a "a|b|c" filter string into a clean array of slugs.
+ */
+function product_filter_split( $key ) {
+	$raw = isset( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : '';
 
+	return array_values( array_filter( explode( '|', $raw ), 'strlen' ) );
+}
+
+function product_filter_ajax() {
+$pscat    = product_filter_split( 'pscat' );
+$psbrand  = product_filter_split( 'psbrand' );
+$ps       = sanitize_text_field( wp_unslash( $_POST['ps'] ?? '' ) );
+$psprice  = sanitize_text_field( wp_unslash( $_POST['psprice'] ?? '' ) );
+$sorting  = sanitize_key( $_POST['pssorting'] ?? '' );
+$minprice = isset( $_POST['minprice'] ) && '' !== $_POST['minprice'] ? (float) $_POST['minprice'] : '';
+$maxprice = isset( $_POST['maxprice'] ) && '' !== $_POST['maxprice'] ? (float) $_POST['maxprice'] : '';
+$datacat   = $pscat;
+$databrand = $psbrand;
 
    //  Asad Code 
 	          $args = array(
@@ -148,8 +163,12 @@ $prices = array();
     	   echo '</div></div>';
     	endwhile; wp_reset_postdata(); 
     
-    	$min = min($prices);
-        $max = max($prices);
+    	$min = $prices ? min( $prices ) : 0;
+        $max = $prices ? max( $prices ) : 0;
 
-        echo '<input type="hidden" class="max_p" value="'.$max.'"><input type="hidden" class="min_p" value="'.$min.'">';  
+        echo '<input type="hidden" class="max_p" value="' . esc_attr( $max ) . '"><input type="hidden" class="min_p" value="' . esc_attr( $min ) . '">';
    echo '</div>';
+}
+
+wp_die();
+}

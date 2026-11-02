@@ -1,3 +1,11 @@
+<?php
+/**
+ * Custom rewrite rules
+ *
+ * Pretty URLs of the form /{category}/{post}/ for a custom post type, plus fixed page rewrites.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 function my_custom_rewrite() {
    $args = array("post_type" => "bunch_property","posts_per_page" => -1);
    $posts = get_posts( $args );

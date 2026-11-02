@@ -1,10 +1,17 @@
-
+<?php
+/**
+ * AJAX: brands available in selected categories
+ *
+ * Returns brand checkboxes limited to brands that exist in the selected product categories.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 function product_searchcategory() {
-    $datacat = array_filter(explode('|',$_POST['pscat']), function($value) { return !is_null($value) && $value !== ''; });
-$databrand = array_filter(explode('|',$_POST['psbrand']), function($value) { return !is_null($value) && $value !== ''; });
-$ps = $_POST['ps'];
+    $datacat = array_filter(explode( '|', sanitize_text_field( wp_unslash( $_POST['pscat'] ?? '' ) ) ), function($value) { return !is_null($value) && $value !== ''; });
+$databrand = array_filter(explode( '|', sanitize_text_field( wp_unslash( $_POST['psbrand'] ?? '' ) ) ), function($value) { return !is_null($value) && $value !== ''; });
+$ps = sanitize_text_field( wp_unslash( $_POST['ps'] ?? '' ) );
 
-    if(empty($_POST['pscat'])){
+    if ( empty( $_POST['pscat'] ) ){
         
         $categories = get_terms( ['taxonomy' => 'pa_merk', 'hide_empty' => true] );
             foreach( $categories as $term ) { 

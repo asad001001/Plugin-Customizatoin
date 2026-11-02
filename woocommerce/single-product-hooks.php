@@ -1,3 +1,11 @@
+<?php
+/**
+ * Single product page hooks
+ *
+ * Ticket progress bar, custom add-to-cart text, quantity +/- buttons and a countdown timer on the product page.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 //  Adding element to product detail page
 add_action( 'woocommerce_before_add_to_cart_button','progress_bar' );
 function progress_bar($product){
@@ -14,7 +22,7 @@ function woocommerce_custom_single_add_to_cart_text() {
 }
 
 
-<!-- plus mins button to prodduct single page -->
+// Plus / minus buttons on the single product page.
 
 
 

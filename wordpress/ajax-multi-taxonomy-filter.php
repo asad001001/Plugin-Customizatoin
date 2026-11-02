@@ -1,4 +1,11 @@
-
+<?php
+/**
+ * AJAX filter across multiple taxonomies
+ *
+ * [show_therapist] shortcode with city/type/service filters that reload results by AJAX using a tax_query over several taxonomies.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 // short code for filters
 
 add_shortcode('show_therapist','show_therapist');
@@ -229,7 +236,7 @@ function filter_therapy_ajax_action() {
      
     );
     $args['tax_query'] = array( 'relation'=> 'AND' );
-    foreach($_POST['selectdata'] as $item){
+    foreach ( (array) wp_unslash( $_POST['selectdata'] ?? array() ) as $item ) {
         
         array_push($args['tax_query'] , array(
                         'taxonomy' => $item['name'],

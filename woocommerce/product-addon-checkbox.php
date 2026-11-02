@@ -1,4 +1,12 @@
-<?php 
+<?php
+/**
+ * Paid add-on checkbox on products
+ *
+ * Adds a notice and an optional paid checkbox before the add-to-cart button, carries it through cart, checkout and order meta, and adds the fee to the total.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
+ 
 // add note before add to cart button //
 
 add_action( 'woocommerce_before_add_to_cart_button', 'gj_custom_before_add_to_cart_btn' );
@@ -36,7 +44,7 @@ function save_checkbox_to_cart_item($cart_item_data, $product_id) {
     
     if ( isset($_POST['variation_id']) ) {
         
-            $variation_id = $_POST['variation_id'];
+            $variation_id = absint( $_POST['variation_id'] );
             //  $variation_id = $cart_item['variation_id'];
             $variation = new WC_Product_Variation( $variation_id );
         

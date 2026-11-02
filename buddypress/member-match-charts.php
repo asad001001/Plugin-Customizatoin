@@ -1,3 +1,11 @@
+<?php
+/**
+ * BuddyPress member comparison charts
+ *
+ * [user_data] shortcode comparing the current member's profile answers with other members and drawing Chart.js charts.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 function user_data(){
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>

@@ -1,5 +1,11 @@
-
-
+<?php
+/**
+ * AJAX file upload to the Media Library
+ *
+ * [sponsor_logo] shortcode with drag-and-drop upload, preview and delete, stored as attachments.
+ *
+ * Usage: paste into a plugin or the theme's functions.php.
+ */
 add_shortcode('sponsor_logo','sponsor_logo');
 
 function sponsor_logo(){
@@ -89,13 +95,14 @@ function sponsor_logo(){
   	var parent = $("#" + event.target.id).parent();
   	var data = new FormData();
   	data.append("action", "ibenic_file_upload");
+  	data.append("nonce", "<?php echo esc_js( wp_create_nonce( 'ibenic_file_upload' ) ); ?>");
   	$.each(file, function(key, value)
     	{
       		data.append("ibenic_file_upload", value);
     	});
 
     	$.ajax({
-    		  url: wc_add_to_cart_params.ajax_url,
+    		  url: "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>",
 	          type: 'POST',
 	          data: data,
 	          cache: false,
@@ -143,10 +150,19 @@ function sponsor_logo(){
  <?php
 }
 
-add_action("wp_ajax_nopriv_ibenic_file_upload", "ibenic_file_upload");
-add_action("wp_ajax_ibenic_file_upload", "ibenic_file_upload");
+// Logged-in users only: anonymous uploads to the Media Library are a security risk.
+add_action( 'wp_ajax_ibenic_file_upload', 'ibenic_file_upload' );
 
 function ibenic_file_upload() {
+	check_ajax_referer( 'ibenic_file_upload', 'nonce' );
+
+	if ( ! current_user_can( 'upload_files' ) ) {
+		wp_send_json( array( 'response' => 'ERROR', 'error' => 'You are not allowed to upload files.' ) );
+	}
+
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/media.php';
+	require_once ABSPATH . 'wp-admin/includes/image.php';
 
 	$usingUploader = 2;
 
